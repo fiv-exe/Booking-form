@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Termin buchen</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    background: #F9F4EF;
+    color: #3a3028;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .header .dot-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 1.2rem;
+  }
+
+  .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #C9A97A;
+  }
+
+  .dot.large {
+    width: 8px;
+    height: 8px;
+  }
+
+  .header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 2.6rem;
+    letter-spacing: 0.08em;
+    color: #3a3028;
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+  }
+
+  .header p {
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #9a8472;
+    font-weight: 400;
+  }
+
+  .card {
+    background: #FFFAF5;
+    border: 1px solid #E8DDD2;
+    border-radius: 2px;
+    padding: 2.5rem 2.5rem;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 2rem;
+  }
+
+  .divider span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #C9A97A;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #E8DDD2;
+  }
+
+  .field {
+    margin-bottom: 1.4rem;
+  }
+
+  label {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #9a8472;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    background: #F9F4EF;
+    border: 1px solid #E0D4C8;
+    border-radius: 1px;
+    padding: 0.75rem 1rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: #3a3028;
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: #C9A97A;
+    background: #FFFAF5;
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: #bfb0a0;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .select-wrapper {
+    position: relative;
+  }
+
+  .select-wrapper::after {
+    content: '';
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid #C9A97A;
+    pointer-events: none;
+  }
+
+  select option {
+    background: #FFFAF5;
+    color: #3a3028;
+  }
+
+  textarea {
+    resize: none;
+    height: 80px;
+    line-height: 1.6;
+  }
+
+  .submit-btn {
+    width: 100%;
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #3a3028;
+    color: #F9F4EF;
+    border: none;
+    border-radius: 1px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .submit-btn:hover {
+    background: #C9A97A;
+  }
+
+  .submit-btn:active {
+    transform: scale(0.99);
+  }
+
+  .footer-note {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.72rem;
+    color: #bfb0a0;
+    letter-spacing: 0.05em;
+  }
+
+  .success {
+    display: none;
+    text-align: center;
+    padding: 3rem 2rem;
+  }
+
+  .success.visible { display: block; }
+  .form-content.hidden { display: none; }
+
+  .success-icon {
+    width: 48px;
+    height: 48px;
+    border: 1px solid #C9A97A;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+
+  .success-icon svg { stroke: #C9A97A; }
+
+  .success h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 1.8rem;
+    letter-spacing: 0.05em;
+    color: #3a3028;
+    margin-bottom: 0.75rem;
+  }
+
+  .success p {
+    font-size: 0.85rem;
+    color: #9a8472;
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div class="dot-row">
+      <div class="dot"></div>
+      <div class="dot large"></div>
+      <div class="dot"></div>
+    </div>
+    <h1>Nagelstudio</h1>
+    <p>Terminbuchung</p>
+  </div>
+
+  <div class="card">
+    <div class="form-content" id="formContent">
+      <div class="divider"><span>Persönliche Daten</span></div>
+
+      <div class="row">
+        <div class="field">
+          <label>Vorname</label>
+          <input type="text" placeholder="Anna" id="firstName" required>
+        </div>
+        <div class="field">
+          <label>Nachname</label>
+          <input type="text" placeholder="Müller" id="lastName" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>E-Mail</label>
+        <input type="email" placeholder="anna@beispiel.at" id="email" required>
+      </div>
+
+      <div class="field">
+        <label>Telefon</label>
+        <input type="tel" placeholder="+43 660 123 4567" id="phone" required>
+      </div>
+
+      <div class="divider" style="margin-top: 2rem;"><span>Termindetails</span></div>
+
+      <div class="field">
+        <label>Leistung</label>
+        <div class="select-wrapper">
+          <select id="service" required>
+            <option value="" disabled selected>Bitte wählen…</option>
+            <option>Gelnägel – Neuanlage</option>
+            <option>Gelnägel – Auffüllung</option>
+            <option>Acrylnägel – Neuanlage</option>
+            <option>Acrylnägel – Auffüllung</option>
+            <option>Shellac / Lackierung</option>
+            <option>Nageldesign & Dekoration</option>
+            <option>Maniküre klassisch</option>
+            <option>Abnahme</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Datum</label>
+          <input type="date" id="date" required>
+        </div>
+        <div class="field">
+          <label>Uhrzeit</label>
+          <input type="time" id="time" min="09:00" max="19:00" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Anmerkungen (optional)</label>
+        <textarea placeholder="Besondere Wünsche, Allergien, etc." id="notes"></textarea>
+      </div>
+
+      <button class="submit-btn" onclick="submitForm()">Termin anfragen</button>
+    </div>
+
+    <div class="success" id="successMsg">
+      <div class="success-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <h2>Danke!</h2>
+      <p>Deine Anfrage wurde erfolgreich gesendet.<br>Wir melden uns in Kürze zur Bestätigung.</p>
+    </div>
+  </div>
+
+  <p class="footer-note">Ihre Daten werden vertraulich behandelt und nicht weitergegeben.</p>
+</div>
+
+<script>
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('date').setAttribute('min', today);
+
+  function submitForm() {
+    const fields = ['firstName', 'lastName', 'email', 'phone', 'service', 'date', 'time'];
+    let valid = true;
+    fields.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el.value) { el.style.borderColor = '#C9A97A'; valid = false; }
+      else el.style.borderColor = '#E0D4C8';
+    });
+
+    if (!valid) return;
+
+    const data = {
+      name: document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value,
+      email: document.getElementById('email').value,
+      phone: document.getElementById('phone').value,
+      service: document.getElementById('service').value,
+      date: document.getElementById('date').value,
+      time: document.getElementById('time').value,
+      notes: document.getElementById('notes').value
+    };
+
+    const WEBHOOK_URL = 'YOUR_N8N_WEBHOOK_URL_HERE';
+
+    fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).catch(() => {});
+
+    document.getElementById('formContent').classList.add('hidden');
+    const s = document.getElementById('successMsg');
+    s.querySelector('h2').textContent = 'Danke, ' + document.getElementById('firstName').value + '!';
+    s.classList.add('visible');
+  }
+</script>
+</body>
+</html>
